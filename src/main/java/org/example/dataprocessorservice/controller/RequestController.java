@@ -6,13 +6,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/request")
+@RequestMapping
 @AllArgsConstructor
 public class RequestController {
 
     private final ConversionService conversionService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/request",consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public String convertXmlToJson(@RequestBody String xml) {
         return conversionService.convertXmlToJson(xml);
     }
