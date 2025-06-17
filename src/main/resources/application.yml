@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: DataProcessorService
+  datasource:
+    url: jdbc:postgresql://localhost:5432/data_processor
+    username: postgres
+    password: pswd
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+  page:
+    page-size: 20
