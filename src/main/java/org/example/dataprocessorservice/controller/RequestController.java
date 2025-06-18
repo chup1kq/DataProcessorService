@@ -1,12 +1,12 @@
 package org.example.dataprocessorservice.controller;
 
 import lombok.AllArgsConstructor;
-import org.example.dataprocessorservice.entity.RequestLog;
+import org.example.dataprocessorservice.dto.PageResponseDto;
+import org.example.dataprocessorservice.dto.RequestLogDto;
+import org.example.dataprocessorservice.dto.RequestLogFilterDto;
 import org.example.dataprocessorservice.service.ConversionService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping
@@ -21,7 +21,7 @@ public class RequestController {
     }
 
     @GetMapping(path = "/page", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<RequestLog> getRequestData(
+    public PageResponseDto<RequestLogDto> getRequestData(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) Long minProcessingTime,
             @RequestParam(required = false) Long maxProcessingTime,
@@ -31,13 +31,15 @@ public class RequestController {
             @RequestParam(required = false) Integer maxJsonKeys
     ) {
         return conversionService.getRequestLogs(
-                page,
-                minProcessingTime,
-                maxProcessingTime,
-                minXmlTags,
-                maxXmlTags,
-                minJsonKeys,
-                maxJsonKeys
+                RequestLogFilterDto.builder()
+                        .minProcessingTime(minProcessingTime)
+                        .maxProcessingTime(maxProcessingTime)
+                        .minXmlTags(minXmlTags)
+                        .maxXmlTags(maxXmlTags)
+                        .minJsonKeys(minJsonKeys)
+                        .maxJsonKeys(maxJsonKeys)
+                        .build(),
+                page
         );
     }
 }

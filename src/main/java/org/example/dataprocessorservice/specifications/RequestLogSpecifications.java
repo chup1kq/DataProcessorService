@@ -1,25 +1,19 @@
 package org.example.dataprocessorservice.specifications;
 
+import org.example.dataprocessorservice.dto.RequestLogFilterDto;
 import org.example.dataprocessorservice.entity.RequestLog;
 import org.springframework.data.jpa.domain.Specification;
 
 public class RequestLogSpecifications {
 
-    public static Specification<RequestLog> withFilters(
-            Long minProcessingTime,
-            Long maxProcessingTime,
-            Integer minXmlTags,
-            Integer maxXmlTags,
-            Integer minJsonKeys,
-            Integer maxJsonKeys
-    ) {
+    public static Specification<RequestLog> withFilters(RequestLogFilterDto requestLogFilterDto) {
         return Specification.<RequestLog>allOf()
-                .and(min(minProcessingTime, "processingTimeMs"))
-                .and(max(maxProcessingTime, "processingTimeMs"))
-                .and(min(minXmlTags, "xmlTagCount"))
-                .and(max(maxXmlTags, "xmlTagCount"))
-                .and(min(minJsonKeys, "jsonKeyCount"))
-                .and(max(maxJsonKeys, "jsonKeyCount"));
+                .and(min(requestLogFilterDto.getMinProcessingTime(), "processingTimeMs"))
+                .and(max(requestLogFilterDto.getMaxProcessingTime(), "processingTimeMs"))
+                .and(min(requestLogFilterDto.getMinXmlTags(), "xmlTagCount"))
+                .and(max(requestLogFilterDto.getMaxXmlTags(), "xmlTagCount"))
+                .and(min(requestLogFilterDto.getMinJsonKeys(), "jsonKeyCount"))
+                .and(max(requestLogFilterDto.getMaxJsonKeys(), "jsonKeyCount"));
     }
 
     private static <T extends Number & Comparable<? super T>> Specification<RequestLog> min(T param, String fieldName) {
