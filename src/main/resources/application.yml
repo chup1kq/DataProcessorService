@@ -1,13 +1,23 @@
 spring:
-  application:
-    name: DataProcessorService
   datasource:
-    url: jdbc:postgresql://localhost:5432/data_processor
-    username: postgres
-    password: pswd
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
     hibernate:
       ddl-auto: update
+    show-sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+    contexts: dev
+
   page:
     page-size: 20
