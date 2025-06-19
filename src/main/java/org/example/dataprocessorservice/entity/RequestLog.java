@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "request_log")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,15 +18,15 @@ public class RequestLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "json_payload", columnDefinition = "TEXT")
     private String jsonPayload;
 
-    @Column
+    @Column(name = "processing_time_ms", nullable = false)
     private long processingTimeMs;
 
-    @Column
-    private int xmlTagCount;
+    @Column(name = "xml_tag_count")
+    private Integer xmlTagCount;
 
-    @Column
-    private int jsonKeyCount;
+    @Column(name = "json_key_count")
+    private Integer jsonKeyCount;
 }
