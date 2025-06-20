@@ -1,6 +1,7 @@
 package org.example.dataprocessorservice.controller;
 
 import lombok.AllArgsConstructor;
+import org.example.dataprocessorservice.dto.JsonDto;
 import org.example.dataprocessorservice.dto.PageResponseDto;
 import org.example.dataprocessorservice.dto.RequestLogDto;
 import org.example.dataprocessorservice.dto.RequestLogFilterDto;
@@ -15,12 +16,17 @@ public class RequestController {
 
     private final ConversionService conversionService;
 
-    @PostMapping(path = "/request",consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String convertXmlToJson(@RequestBody String xml) {
+    @PostMapping(path = "/request",
+            consumes = MediaType.APPLICATION_XML_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public JsonDto convertXmlToJson(@RequestBody String xml) {
         return conversionService.convertXmlToJson(xml);
     }
 
-    @GetMapping(path = "/page", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/page",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public PageResponseDto<RequestLogDto> getRequestData(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) Long minProcessingTime,
