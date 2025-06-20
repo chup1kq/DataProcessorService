@@ -30,7 +30,18 @@ public enum ExceptionName {
             "ERR-XML-503",
             "Internal XML parser error",
             HttpStatus.SERVICE_UNAVAILABLE
-            );
+    ),
+
+    S3_UPLOAD_ERROR(
+            "ERR-S3-500",
+            "Failed to upload file to S3 storage",
+            HttpStatus.INTERNAL_SERVER_ERROR
+    ),
+    S3_DOWNLOAD_ERROR(
+            "ERR-S3-500",
+            "Failed to download file from S3 storage",
+            HttpStatus.INTERNAL_SERVER_ERROR
+    );
 
     private final String code;
     private final String message;
