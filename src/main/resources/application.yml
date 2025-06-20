@@ -1,4 +1,8 @@
 spring:
+
+  application:
+    name: DataProcessorService
+
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
@@ -21,3 +25,11 @@ spring:
 
   page:
     page-size: 20
+aws:
+  s3:
+    bucket-name: request-logs-s3
+    endpoint: https://storage.yandexcloud.net
+    region: ru-central1
+  credentials:
+    access-key: YCAJExrYJCvbgri16p5I5-PA-
+    secret-key:
