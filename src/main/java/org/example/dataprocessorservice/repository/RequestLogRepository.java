@@ -8,11 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import java.util.List;
 
 public interface RequestLogRepository extends JpaRepository<RequestLog, Long>, JpaSpecificationExecutor<RequestLog> {
 
-    List<RequestLog> findByExternalIdIsNull();
+    Page<RequestLog> findByExternalIdIsNull(Pageable pageable);
 
     default Page<RequestLog> getRequestLogs(RequestLogFilterDto requestLogFilterDto, Pageable pageable) {
         return findAll(RequestLogSpecifications.withFilters(requestLogFilterDto), pageable);
