@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping
 @AllArgsConstructor
@@ -29,20 +31,18 @@ public class RequestController {
     )
     public Page<RequestLogDto> getRequestData(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(required = false) Long minProcessingTime,
-            @RequestParam(required = false) Long maxProcessingTime,
-            @RequestParam(required = false) Integer minXmlTags,
-            @RequestParam(required = false) Integer maxXmlTags,
-            @RequestParam(required = false) Integer minJsonKeys,
-            @RequestParam(required = false) Integer maxJsonKeys
+            @RequestParam(required = false) LocalDateTime fromDate,
+            @RequestParam(required = false) LocalDateTime toDate,
+            @RequestParam(required = false) Long processingTime,
+            @RequestParam(required = false) Integer xmlTagsCount,
+            @RequestParam(required = false) Integer jsonKeysCount
     ) {
         RequestLogFilterDto requestLogFilterDto = RequestLogFilterDto.builder()
-                .minProcessingTime(minProcessingTime)
-                .maxProcessingTime(maxProcessingTime)
-                .minXmlTags(minXmlTags)
-                .maxXmlTags(maxXmlTags)
-                .minJsonKeys(minJsonKeys)
-                .maxJsonKeys(maxJsonKeys)
+                .fromDate(fromDate)
+                .toDate(toDate)
+                .processingTimeMs(processingTime)
+                .xmlTagsCount(xmlTagsCount)
+                .jsonKeysCount(jsonKeysCount)
                 .build();
 
         return conversionService.getRequestLogs(requestLogFilterDto, page);
