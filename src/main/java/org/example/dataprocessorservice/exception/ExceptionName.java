@@ -41,6 +41,11 @@ public enum ExceptionName {
             "ERR-S3-500",
             "Failed to download file from S3 storage",
             HttpStatus.INTERNAL_SERVER_ERROR
+    ),
+    S3_DELETE_ERROR(
+            "ERR-S3-500",
+            "Failed to delete file from S3 storage",
+            HttpStatus.INTERNAL_SERVER_ERROR
     );
 
     private final String code;
