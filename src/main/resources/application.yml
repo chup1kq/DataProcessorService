@@ -25,10 +25,6 @@ spring:
 
   page:
     page-size: 20
-
-  migration:
-    delay-ms: 60000
-
 aws:
   s3:
     bucket-name: request-logs-s3
