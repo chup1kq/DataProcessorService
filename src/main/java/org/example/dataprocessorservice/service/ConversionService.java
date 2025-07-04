@@ -6,7 +6,6 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.RequiredArgsConstructor;
 import org.example.dataprocessorservice.entity.RequestLog;
 import org.example.dataprocessorservice.repository.RequestLogRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -15,38 +14,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
 import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
 public class ConversionService {
 
-    @Value("${spring.page-size}")
-    private int pageSize;
-
     private final RequestLogRepository requestLogRepository;
-
-    public List<RequestLog> getRequestLogs(
-            int page,
-            Long minProcessingTime,
-            Long maxProcessingTime,
-            Integer minXmlTags,
-            Integer maxXmlTags,
-            Integer minJsonKeys,
-            Integer maxJsonKeys
-    ) {
-        return requestLogRepository.getRequestLogs(
-                page,
-                pageSize,
-                minProcessingTime,
-                maxProcessingTime,
-                minXmlTags,
-                maxXmlTags,
-                minJsonKeys,
-                maxJsonKeys
-        );
-    }
 
     public String convertXmlToJson(String xmlContent) {
 
