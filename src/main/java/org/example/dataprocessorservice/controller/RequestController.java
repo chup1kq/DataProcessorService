@@ -30,15 +30,16 @@ public class RequestController {
             @RequestParam(required = false) Integer minJsonKeys,
             @RequestParam(required = false) Integer maxJsonKeys
     ) {
-        RequestLogFilterDto requestLogFilterDto = RequestLogFilterDto.builder()
-                .minProcessingTime(minProcessingTime)
-                .maxProcessingTime(maxProcessingTime)
-                .minXmlTags(minXmlTags)
-                .maxXmlTags(maxXmlTags)
-                .minJsonKeys(minJsonKeys)
-                .maxJsonKeys(maxJsonKeys)
-                .build();
-
-        return conversionService.getRequestLogs(requestLogFilterDto, page);
+        return conversionService.getRequestLogs(
+                RequestLogFilterDto.builder()
+                        .minProcessingTime(minProcessingTime)
+                        .maxProcessingTime(maxProcessingTime)
+                        .minXmlTags(minXmlTags)
+                        .maxXmlTags(maxXmlTags)
+                        .minJsonKeys(minJsonKeys)
+                        .maxJsonKeys(maxJsonKeys)
+                        .build(),
+                page
+        );
     }
 }
