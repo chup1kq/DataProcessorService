@@ -8,9 +8,6 @@ import org.example.dataprocessorservice.dto.PageResponseDto;
 import org.example.dataprocessorservice.dto.RequestLogDto;
 import org.example.dataprocessorservice.dto.RequestLogFilterDto;
 import org.example.dataprocessorservice.entity.RequestLog;
-import org.example.dataprocessorservice.exception.InvalidXmlException;
-import org.example.dataprocessorservice.exception.XmlParserConfigurationException;
-import org.example.dataprocessorservice.exception.XmlProcessingIOException;
 import org.example.dataprocessorservice.mapper.RequestLogListMapper;
 import org.example.dataprocessorservice.repository.RequestLogRepository;
 import org.springframework.data.domain.Page;
@@ -77,11 +74,11 @@ public class ConversionService {
             return json;
 
         } catch (ParserConfigurationException e) {
-            throw new XmlParserConfigurationException();
+            throw new RuntimeException("XML parser configuration error", e);
         } catch (SAXException e) {
-            throw new InvalidXmlException();
+            throw new RuntimeException("Invalid XML format", e);
         } catch (IOException e) {
-            throw new XmlProcessingIOException();
+            throw new RuntimeException("I/O error during XML processing", e);
         }
     }
 
