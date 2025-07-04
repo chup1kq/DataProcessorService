@@ -66,14 +66,13 @@ public class ConversionService {
 
             long conversionTime = System.currentTimeMillis() - start;
 
-            RequestLog requestLog = RequestLog.builder()
+            requestLogRepository.save(RequestLog.builder()
                     .jsonPayload(json)
                     .jsonKeyCount(jsonKeysCount)
                     .xmlTagCount(xmlTagsCount)
                     .processingTimeMs(conversionTime)
-                    .build();
-
-            requestLogRepository.save(requestLog);
+                    .build()
+            );
 
             return json;
 
