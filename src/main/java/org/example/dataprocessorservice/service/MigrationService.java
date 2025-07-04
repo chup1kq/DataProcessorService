@@ -8,6 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,11 +18,12 @@ public class MigrationService {
 
     private final RequestLogRepository requestLogRepository;
 
-    private final MigrationProcessor migrationProcessor;
+    private final S3Service s3Service;
 
     @Value("${spring.page.page-size}")
     private int pageSize;
 
+    @Transactional
     @Scheduled(fixedDelayString = "${spring.migration.delay-ms}")
     public void migrateToS3() {
 
@@ -28,8 +32,15 @@ public class MigrationService {
 
         do {
             page = requestLogRepository.findByExternalIdIsNull(PageRequest.of(pageNumber, pageSize));
+            List<RequestLog> logs = page.getContent();
 
-            migrationProcessor.processPage(page.getContent());
+            for (RequestLog log : logs) {
+                String key = s3Service.uploadJson(log.getJsonPayload());
+                log.setJsonPayload(null);
+                log.setExternalId(key);
+            }
+
+            requestLogRepository.saveAll(logs);
             pageNumber++;
         } while (page.hasNext());
     }
