@@ -1,6 +1,6 @@
 package org.example.dataprocessorservice.controller;
 
-import org.example.dataprocessorservice.exception.XmlConversionException;
+import org.example.dataprocessorservice.exception.BaseAppException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,8 +12,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(XmlConversionException.class)
-    public ResponseEntity<Map<String, Object>> handleBaseAppException(XmlConversionException ex) {
+    @ExceptionHandler(BaseAppException.class)
+    public ResponseEntity<Map<String, Object>> handleBaseAppException(BaseAppException ex) {
         Map<String, Object> errorBody = new HashMap<>();
         errorBody.put("code", ex.getCode());
         errorBody.put("message", ex.getMessage());
