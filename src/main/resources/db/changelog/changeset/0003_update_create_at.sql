@@ -1,1 +1,0 @@
-UPDATE request_log SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
