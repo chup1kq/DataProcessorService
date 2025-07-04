@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.RequiredArgsConstructor;
 import org.example.dataprocessorservice.dto.JsonDto;
+import org.example.dataprocessorservice.dto.PageResponseDto;
 import org.example.dataprocessorservice.dto.RequestLogDto;
 import org.example.dataprocessorservice.dto.RequestLogFilterDto;
 import org.example.dataprocessorservice.entity.RequestLog;
@@ -15,7 +16,6 @@ import org.example.dataprocessorservice.mapper.RequestLogListMapper;
 import org.example.dataprocessorservice.repository.RequestLogRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
@@ -41,7 +41,7 @@ public class ConversionService {
 
     private final S3Service s3Service;
 
-    public Page<RequestLogDto> getRequestLogs(RequestLogFilterDto requestLogFilterDto, int page) {
+    public PageResponseDto<RequestLogDto> getRequestLogs(RequestLogFilterDto requestLogFilterDto, int page) {
         Page<RequestLog> pageContent = requestLogRepository.getRequestLogs(
                 requestLogFilterDto, PageRequest.of(page, pageSize));
 
@@ -49,11 +49,13 @@ public class ConversionService {
                 .peek(this::enrichJsonIfNecessary)
                 .toList();
 
-        return new PageImpl<>(
-                requestLogListMapper.toDtoList(enrichedLogs),
-                pageContent.getPageable(),
-                pageContent.getTotalElements()
-        );
+        return PageResponseDto.<RequestLogDto>builder()
+                .content(requestLogListMapper.toDtoList(enrichedLogs))
+                .number(pageContent.getNumber())
+                .pageSize(pageContent.getSize())
+                .totalPages(pageContent.getTotalPages())
+                .totalElements(pageContent.getNumberOfElements())
+                .build();
     }
 
     public JsonDto convertXmlToJson(String xmlContent) {

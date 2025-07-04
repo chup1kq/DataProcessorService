@@ -2,10 +2,10 @@ package org.example.dataprocessorservice.controller;
 
 import lombok.AllArgsConstructor;
 import org.example.dataprocessorservice.dto.JsonDto;
+import org.example.dataprocessorservice.dto.PageResponseDto;
 import org.example.dataprocessorservice.dto.RequestLogDto;
 import org.example.dataprocessorservice.dto.RequestLogFilterDto;
 import org.example.dataprocessorservice.service.ConversionService;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +27,7 @@ public class RequestController {
     @GetMapping(path = "/page",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public Page<RequestLogDto> getRequestData(
+    public PageResponseDto<RequestLogDto> getRequestData(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) Long minProcessingTime,
             @RequestParam(required = false) Long maxProcessingTime,
