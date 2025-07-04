@@ -25,7 +25,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -39,18 +38,12 @@ public class ConversionService {
 
     private final RequestLogListMapper requestLogListMapper;
 
-    private final S3Service s3Service;
-
     public PageResponseDto<RequestLogDto> getRequestLogs(RequestLogFilterDto requestLogFilterDto, int page) {
         Page<RequestLog> pageContent = requestLogRepository.getRequestLogs(
                 requestLogFilterDto, PageRequest.of(page, pageSize));
 
-        List<RequestLog> enrichedLogs = pageContent.getContent().stream()
-                .peek(this::enrichJsonIfNecessary)
-                .toList();
-
         return PageResponseDto.<RequestLogDto>builder()
-                .content(requestLogListMapper.toDtoList(enrichedLogs))
+                .content(requestLogListMapper.toDtoList(pageContent.getContent()))
                 .number(pageContent.getNumber())
                 .pageSize(pageContent.getSize())
                 .totalPages(pageContent.getTotalPages())
@@ -109,12 +102,5 @@ public class ConversionService {
         return jsonNode.size() + StreamSupport.stream(jsonNode.spliterator(), false)
                 .mapToInt(this::countJSONKeys)
                 .sum();
-    }
-
-    private void enrichJsonIfNecessary(RequestLog log) {
-        if (log.getJsonPayload() == null && log.getExternalId() != null) {
-            String json = s3Service.downloadJson(log.getExternalId());
-            log.setJsonPayload(json);
-        }
     }
 }
