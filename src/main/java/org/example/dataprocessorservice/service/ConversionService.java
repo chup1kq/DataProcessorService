@@ -4,15 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.RequiredArgsConstructor;
-import org.example.dataprocessorservice.dto.PageResponseDto;
-import org.example.dataprocessorservice.dto.RequestLogDto;
-import org.example.dataprocessorservice.dto.RequestLogFilterDto;
 import org.example.dataprocessorservice.entity.RequestLog;
-import org.example.dataprocessorservice.mapper.RequestLogListMapper;
 import org.example.dataprocessorservice.repository.RequestLogRepository;
-import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -21,30 +15,37 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.List;
 import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
 public class ConversionService {
 
-    @Value("${spring.page.page-size}")
+    @Value("${spring.page-size}")
     private int pageSize;
 
     private final RequestLogRepository requestLogRepository;
 
-    private final RequestLogListMapper requestLogListMapper;
-
-    public PageResponseDto<RequestLogDto> getRequestLogs(RequestLogFilterDto requestLogFilterDto, int page) {
-        Page<RequestLog> pageContent = requestLogRepository.getRequestLogs(
-                requestLogFilterDto, PageRequest.of(page, pageSize));
-
-        return PageResponseDto.<RequestLogDto>builder()
-                .content(requestLogListMapper.toDtoList(pageContent.getContent()))
-                .number(pageContent.getNumber())
-                .pageSize(pageContent.getSize())
-                .totalPages(pageContent.getTotalPages())
-                .totalElements(pageContent.getNumberOfElements())
-                .build();
+    public List<RequestLog> getRequestLogs(
+            int page,
+            Long minProcessingTime,
+            Long maxProcessingTime,
+            Integer minXmlTags,
+            Integer maxXmlTags,
+            Integer minJsonKeys,
+            Integer maxJsonKeys
+    ) {
+        return requestLogRepository.getRequestLogs(
+                page,
+                pageSize,
+                minProcessingTime,
+                maxProcessingTime,
+                minXmlTags,
+                maxXmlTags,
+                minJsonKeys,
+                maxJsonKeys
+        );
     }
 
     public String convertXmlToJson(String xmlContent) {
