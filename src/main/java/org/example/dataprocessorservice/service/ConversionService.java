@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.RequiredArgsConstructor;
-import org.example.dataprocessorservice.dto.JsonDto;
 import org.example.dataprocessorservice.dto.PageResponseDto;
 import org.example.dataprocessorservice.dto.RequestLogDto;
 import org.example.dataprocessorservice.dto.RequestLogFilterDto;
@@ -51,7 +50,8 @@ public class ConversionService {
                 .build();
     }
 
-    public JsonDto convertXmlToJson(String xmlContent) {
+    public String convertXmlToJson(String xmlContent) {
+
         try {
             long start = System.currentTimeMillis();
 
@@ -75,9 +75,7 @@ public class ConversionService {
 
             requestLogRepository.save(requestLog);
 
-            return JsonDto.builder()
-                    .jsonPayload(json)
-                    .build();
+            return json;
 
         } catch (ParserConfigurationException e) {
             throw new XmlParserConfigurationException();
