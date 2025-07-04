@@ -29,7 +29,4 @@ public class RequestLog {
 
     @Column(name = "json_key_count")
     private Integer jsonKeyCount;
-
-    @Column(name = "external_id")
-    private String externalId;
 }

@@ -1,1 +1,0 @@
-ALTER TABLE request_log ADD COLUMN external_id VARCHAR(255) UNIQUE;
